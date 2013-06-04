@@ -1,6 +1,6 @@
 class CreateSupplierInvoices < ActiveRecord::Migration
   def change
-    create_table :supplier_invoices do |t|
+    create_table :spree_supplier_invoices do |t|
       t.integer :order_id
       t.integer :item_count
       t.decimal :invoice_total

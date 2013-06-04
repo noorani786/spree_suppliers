@@ -1,2 +1,0 @@
-class SupplierInvoicesController < ApplicationController
-end

@@ -1,4 +1,4 @@
-class SuppliersController < Spree::BaseController
+class Spree::SuppliersController < Spree::BaseController
   helper :products
   respond_to :html
 

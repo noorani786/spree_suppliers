@@ -6,15 +6,15 @@ module SpreeSuppliers
     config.autoload_paths += %W(#{config.root}/lib)
     def self.activate
 
-      LineItem.class_eval do
+      Spree::LineItem.class_eval do
         has_many :invoice_items
       end
 
-      Image.class_eval do
+      Spree::Image.class_eval do
         belongs_to :supplier
       end
 
-      Admin::OrdersController.class_eval do
+      Spree::Admin::OrdersController.class_eval do
         def show
           load_order
           # optional fee that admin can charge to sell suppliers products for them
@@ -58,7 +58,7 @@ module SpreeSuppliers
         end
       end
 
-      Order.class_eval do
+      Spree::Order.class_eval do
         has_many :supplier_invoices
         def generate_invoices(order)
           @order = order
@@ -103,85 +103,15 @@ module SpreeSuppliers
         end
       end
 
-
-      Admin::ProductsController.class_eval do
-        before_filter :load
-        before_filter :load_index, :only => [:index]
-        before_filter :edit_before, :only => [:edit]
-        create.before :create_before
-        create.fails :reset
-        update.before :update_taxons
-
-        def load
-          @suppliers = Supplier.find(:all, :order => "name")
-          @options = Taxon.all
-        end
-
-        def load_index
-          if current_user.roles.member?(Role.find_by_name("vendor"))
-            @collection.select! {|c| c.supplier_id == current_user.supplier.id}
-          end
-        end
-
-        #indicate that we want to create a new product
-        def new
-          @object = Product.new()
-          @status = true
-          @suppliers = Supplier.all
-        end
-
-        def edit_before
-          @suppliers = Supplier.all
-          @status = false
-        end
-
-        def taxon_push object
-          object.taxons = []
-          Taxon.all.map {|m| object.taxons.push(Taxon.find_by_id(params[m.name])) if params.member?(m.name)}
-          return object
-        end
-
-        def reset
-          @status = true
-        end
-
-        def update_taxons
-          @object = taxon_push(@object)
-        end
-
-        def create_before
-          if current_user.has_role?("vendor")
-            @object = current_user.supplier.products.build(params[:product])
-          else
-            @object = Product.new(params[:product])
-          end
-          @object = taxon_push(@object)
-        end
-
-        def publish
-          p = Product.find_by_name(params[:id])
-          p.available_on = Date.today
-          p.save
-          redirect_to edit_admin_product_path(p)
-        end
-
-        def unpublish
-          p = Product.find_by_name(params[:id])
-          p.available_on = nil
-          p.save
-          redirect_to edit_admin_product_path(p)
-        end
-      end
-
-      Product.class_eval do
+      Spree::Product.class_eval do
         belongs_to :supplier
       end
 
-      Taxon.class_eval do
+      Spree::Taxon.class_eval do
         has_and_belongs_to_many :suppliers
       end
 
-      User.class_eval do
+      Spree::User.class_eval do
         has_one :supplier
       end
 
