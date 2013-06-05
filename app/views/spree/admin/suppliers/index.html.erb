@@ -1,0 +1,62 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:listing_suppliers) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li id="new_supplier_link">
+    <%= button_link_to Spree.t(:new_supplier), new_object_url, { :icon => 'icon-plus', :id => 'admin_new_supplier' } %>
+  </li>
+<% end %>
+
+<%= paginate @collection %>
+
+<% if @collection.any? %>
+  <table class="index" id="listing_suppliers">
+    <thead>
+      <tr>
+        <th>
+          <%= Spree.t("supplier_name") %>
+        </th>
+        <th>
+          <%= Spree.t("phone") %>
+        </th>
+        <th><%= Spree.t("descripton") %></th>
+        <th>
+          Featured
+        </th>
+        <th class='actions'></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.each do |supplier| %>
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td>
+            <%= link_to supplier.title, edit_admin_supplier_path(supplier) %>
+          </td>
+          <td>
+            <%= supplier.phone %>
+          </td>
+          <td><%= truncate(supplier.notes, :length => 50) %>
+          <td>
+            <% if supplier.featured %>
+              <%= link_to "Yes", admin_supplier_feature_path(supplier) %>
+            <% else %>
+              <%= link_to "No", admin_supplier_feature_path(supplier) %>
+            <% end %>
+          </td>
+          <td class='actions'>
+            <%= link_to_edit supplier, no_text: true, :class => 'edit' %>
+            &nbsp;
+            <%= link_to_delete supplier, no_text: true %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class='no-objects-found'>
+    <%= Spree.t(:no_results) %>
+  </div>
+<% end %>
+
+<%= paginate @collection %>

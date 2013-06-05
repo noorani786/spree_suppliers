@@ -6,6 +6,7 @@ module Spree
     create.before :create_before
     create.fails :reset
     update.before :update_taxons
+    new_action.before :new_action_before
 
     def load
       @suppliers = Supplier.find(:all, :order => "name")
@@ -19,8 +20,7 @@ module Spree
     end
 
     #indicate that we want to create a new product
-    def new
-      @object = Product.new()
+    def new_action_before
       @status = true
       @suppliers = Supplier.all
     end
@@ -45,7 +45,7 @@ module Spree
     end
 
     def create_before
-      if current_user.has_role?("vendor")
+      if spree_current_user.has_spree_role?("vendor")
         @object = current_user.supplier.products.build(params[:product])
       else
         @object = Product.new(params[:product])

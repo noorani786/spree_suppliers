@@ -1,7 +1,7 @@
 <table class="index">
   <thead>
   	<tr>
-  		<th><%= t("supplier_name") %></th>
+  		<th><%= Spree.t("supplier_name") %></th>
   		<th></th>
   	</tr>
   </thead>
@@ -19,7 +19,7 @@
   	    </td>        
       </tr>
     <% else %>
-     <tr><td colspan="3"><%= t('none') %>.</td></tr>
+     <tr><td colspan="3"><%= Spree.t('none') %>.</td></tr>
     <% end %>
   </tbody>
 </table>

@@ -1,11 +1,11 @@
 <table class="index">
   <tbody id='line-items'>
     <tr>
-      <th><%= t('item_description') %></th>
-	  <th class="supplier"><%= t('supplier_name') %></th>
-      <th class="price"><%= t('price') %></th>
-      <th class="qty"><%= t('qty') %></th>
-      <th class="total_display"><span><%= t('total') %></span></th>
+      <th><%= Spree.t('item_description') %></th>
+	  <th class="supplier"><%= Spree.t('supplier_name') %></th>
+      <th class="price"><%= Spree.t('price') %></th>
+      <th class="qty"><%= Spree.t('qty') %></th>
+      <th class="total_display"><span><%= Spree.t('total') %></span></th>
     </tr>
     <% @order.line_items.each do |item| %>
       <tr >

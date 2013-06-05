@@ -1,0 +1,14 @@
+
+<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @supplier } %>
+
+<%= form_for [:admin, @supplier], :html => { :multipart => true } do |f| %>
+  <fieldset data-hook="new_supplier">
+    <legend align="center"><%= Spree.t(:new_supplier) %></legend>
+    
+    <%= render :partial => "form", :locals => { :f => f } %>
+    
+  </fieldset>
+
+  <%= render :partial => 'spree/admin/shared/new_resource_links' %>
+<% end %>
+

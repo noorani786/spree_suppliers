@@ -1,0 +1,30 @@
+<div class='toolbar order-links' data-hook='admin_order_show_buttons'>
+  <% if !spree_current_user.has_spree_role?("vendor") %>
+     <%= button_link_to Spree.t("cancel"), fire_admin_order_url(@order.number, {:e => "cancel"}), :icon => 'delete', :confirm => Spree.t('are_you_sure') if @order.can_cancel? %>
+    <%= button_link_to Spree.t("edit"), edit_admin_order_url(@order.number), :icon => 'edit' %>
+  <% end %>
+</div>
+
+<div data-hook='admin_order_show_addresses'>
+  <% if @order.bill_address %>
+    <div class='adr'>
+      <h4><%= Spree.t("bill_address") %></h4>
+      <%= render :partial => 'spree/admin/shared/address', :locals => {:address => @order.bill_address} %>
+    </div>
+  <% end %>
+  <% if @order.ship_address %>
+    <div class='adr'>
+      <h4><%= Spree.t("ship_address") %></h4>
+      <%= render :partial => 'spree/admin/shared/address', :locals => {:address => @order.ship_address} %>
+    </div>
+  <% end %>
+  <hr />
+</div>
+<% if !spree_current_user.has_spree_role?("vendor") %>
+  <div data-hook='admin_order_show_details'>
+    <%= render :partial => 'spree/admin/shared/order_details', :locals => {:order => @order} %>
+  </div>
+<% end %>
+<h3><%= Spree.t("Supplier_Invoices") %></h3>
+<%= render :partial => 'spree/shared/supplier_invoices', :locals => {:order => @order} %>
+

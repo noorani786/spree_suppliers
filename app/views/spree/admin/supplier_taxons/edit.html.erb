@@ -1,0 +1,11 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<h1><%= Spree.t("taxon_edit")%></h1>
+
+<%= form_for(:taxon, :url => admin_taxonomy_taxon_url(@taxonomy, @taxon), :html => { :method => :put, :multipart => true}) do |f| %>
+  <%= render :partial => 'spree/form', :locals => {:f => f} %>
+
+  <p class="form-buttons">
+    <%= button t("update") %> <%= Spree.t("or") %> <%= link_to t("cancel"), edit_admin_taxonomy_url(@taxonomy) %>
+  </p>
+<% end %>

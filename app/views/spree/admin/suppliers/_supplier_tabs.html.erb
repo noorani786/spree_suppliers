@@ -1,0 +1,16 @@
+<% content_for :sidebar_title do %>
+  <%= Spree.t(:menu) %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <nav class='menu'>
+    <ul class="sidebar supplier-menu" data-hook="admin_supplier_tabs">
+      <li<%== ' class="active"' if current == "Supplier Details" %>>
+        <%= link_to Spree.t(:edit_supplier), edit_admin_supplier_url(@supplier) %>
+      </li>
+      <li<%== ' class="active"' if current == "Taxons" %>>
+        <%= link_to Spree.t(:taxons), selected_admin_supplier_taxons_url(@supplier) %>
+      </li>
+    </ul>
+  </nav>
+<% end %>
