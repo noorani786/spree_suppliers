@@ -46,7 +46,7 @@ module Spree
 
     def create_before
       if spree_current_user.has_spree_role?("vendor")
-        @object = current_user.supplier.products.build(params[:product])
+        @object = spree_current_user.supplier.products.build(params[:product])
       else
         @object = Product.new(params[:product])
       end

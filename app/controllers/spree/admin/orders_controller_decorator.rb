@@ -7,7 +7,7 @@ module Spree
       @fee = 0.10
       if spree_current_user.has_spree_role?("vendor")
         @invoices = @order.supplier_invoices
-        @invoices.select! {|s| s.supplier_id == current_user.supplier.id}
+        @invoices.select! {|s| s.supplier_id == spree_current_user.supplier.id}
       else
         @invoices = @order.supplier_invoices
       end
@@ -18,7 +18,7 @@ module Spree
     def index
       orig_index
       if spree_current_user.has_spree_role?("vendor")
-        @orders.select! {|o| o.supplier_invoices.select {|s| s.supplier_id == current_user.supplier.id}.size > 0}
+        @orders.select! {|o| o.supplier_invoices.select {|s| s.supplier_id == spree_current_user.supplier.id}.size > 0}
       end
       respond_with(@orders)
     end
