@@ -4,6 +4,9 @@ module Spree
       helper 'spree/products'
       
       respond_to :html, :js
+      
+      update.after :update_after
+      create.after :create_after
 
       def index
         session[:return_to] = request.url
@@ -110,18 +113,17 @@ module Spree
       #   wants.html { redirect_to collection_url }
       # end
 
-      update.after do
+      def update_after
         Rails.cache.delete('suppliers')
       end
 
-      create.response do |wants|
-        wants.html { redirect_to collection_url }
-      end
+      # create.response do |wants|
+      #   wants.html { redirect_to collection_url }
+      # end
 
-      create.after do
+      def create_after
         Rails.cache.delete('suppliers')
       end
-
     end
   end
 end
