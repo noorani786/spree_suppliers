@@ -25,22 +25,13 @@ module Spree
         #SupplierMailer.invoice_email(@invoice).deliver
       end
     end
-
+    
+    alias_method :orig_finalize, :finalize!
     def finalize!
-      update_attribute(:completed_at, Time.now)
-      InventoryUnit.assign_opening_inventory(self)
-      # lock any optional adjustments (coupon promotions, etc.)
-      adjustments.optional.each { |adjustment| adjustment.update_attribute('locked', true) }
+      orig_finalize
+
       # generate the invoices for each supplier
       generate_invoices(self)
-      #OrderMailer.confirm_email(self).deliver
-
-      self.state_events.create({
-        :previous_state => 'cart',
-        :next_state => 'complete',
-        :name => 'order' ,
-        :user_id => (User.respond_to?(:current) && User.current.try(:id)) || self.user_id
-      })
     end
   end
 end
