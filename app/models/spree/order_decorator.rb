@@ -1,6 +1,22 @@
 module Spree
   Spree::Order.class_eval do
     has_many :supplier_invoices
+    
+    def suppliers
+      @suppliers ||= line_items.collect { |li| li.product.supplier }.uniq
+    end
+    
+    def supplier_invoice(supplier_id)
+      return supplier_invoices.select { |si| si.supplier_id == supplier_id }.first unless supplier_invoices.empty?  
+      invoice = SupplierInvoice.new(order_id: self.id, supplier_id: supplier_id)
+      supplier_items = line_items.select { |li| li.product.supplier_id == supplier_id }
+      supplier_items.each do |item|
+        invoice.invoice_items.new(product_id: item.product.id, quantity: item.quantity, line_item_id: item.id)
+      end
+      invoice.invoice_total = invoice.item_total + invoice.additional_fees[:amount]
+      invoice
+    end
+    
     def generate_invoices(order)
       @order = order
       @order_products = @order.line_items
@@ -20,7 +36,7 @@ module Spree
         invoice.invoice_items.each do |i|
           item_total = (i.line_item.variant.price * i.quantity) + item_total
         end
-        invoice.update_attributes(:invoice_total => item_total)
+        invoice.update_attributes(:invoice_total => item_total + invoice.additional_fees[:amount])
         @invoice = invoice
         #SupplierMailer.invoice_email(@invoice).deliver
       end

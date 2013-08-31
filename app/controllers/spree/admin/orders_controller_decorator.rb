@@ -1,6 +1,5 @@
 module Spree
-  Spree::Admin::OrdersController.class_eval do
-    
+  Spree::Admin::OrdersController.class_eval do  
     def show
       load_order
       # optional fee that admin can charge to sell suppliers products for them
