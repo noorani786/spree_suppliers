@@ -1,3 +1,6 @@
+<%
+=begin
+%>
 <% if @product.supplier %>
   <div id='product-supplier'>
     <h6 class='product-section-title'><%= Spree.t(:supplier) %></h6>
@@ -6,3 +9,6 @@
     <div><%= @product.sku %></div>
   </div>
 <% end %>
+<%
+=end
+%>
