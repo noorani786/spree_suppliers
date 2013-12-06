@@ -42,6 +42,10 @@ module Spree
       end
     end
     
+    def invoice_total
+      supplier_invoices.reduce(0) { |sum, i| sum + i.invoice_total }
+    end
+    
     alias_method :orig_finalize, :finalize!
     def finalize!
       orig_finalize
