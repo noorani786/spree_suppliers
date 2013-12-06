@@ -13,7 +13,7 @@ module Spree
       supplier_items.each do |item|
         invoice.invoice_items.new(product_id: item.product.id, quantity: item.quantity, line_item_id: item.id)
       end
-      invoice.invoice_total = invoice.item_total + invoice.additional_fees[:amount]
+      invoice.invoice_total = invoice.item_total + invoice.additional_fees[:amount] + invoice.shipping_fees
       invoice
     end
     
@@ -36,7 +36,7 @@ module Spree
         invoice.invoice_items.each do |i|
           item_total = (i.line_item.variant.price * i.quantity) + item_total
         end
-        invoice.update_attributes(:invoice_total => item_total + invoice.additional_fees[:amount])
+        invoice.update_attributes(:invoice_total => item_total + invoice.additional_fees[:amount] + invoice.shipping_fees)
         @invoice = invoice
         #SupplierMailer.invoice_email(@invoice).deliver
       end
@@ -48,6 +48,10 @@ module Spree
 
       # generate the invoices for each supplier
       generate_invoices(self)
+    end
+    
+    def additional_fees
+      supplier_invoices.reduce(0) { |sum, i| sum + i.additional_fees[:amount] }
     end
   end
 end
