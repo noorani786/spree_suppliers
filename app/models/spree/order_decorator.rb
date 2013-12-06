@@ -17,6 +17,10 @@ module Spree
       invoice
     end
     
+    def invoices
+      supplier_invoices.present? ? supplier_invoices : suppliers.collect { |s| supplier_invoice s.id }
+    end
+    
     def generate_invoices(order)
       @order = order
       @order_products = @order.line_items
@@ -42,8 +46,8 @@ module Spree
       end
     end
     
-    def invoice_total
-      supplier_invoices.reduce(0) { |sum, i| sum + i.invoice_total }
+    def invoices_total
+      @invoice_total ||= invoices.reduce(0) { |sum, i| sum + i.invoice_total }
     end
     
     alias_method :orig_finalize, :finalize!
