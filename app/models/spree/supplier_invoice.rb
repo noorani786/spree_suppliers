@@ -17,7 +17,7 @@ module Spree
     end
     
     def shipping_fees
-      shipping_fees? ? 8.50 : 0.00
+      shipping_fees? ? 8.75 : 0.00
     end
     
     def additional_fees
